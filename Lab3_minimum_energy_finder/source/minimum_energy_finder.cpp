@@ -32,7 +32,7 @@ const void minimum_energy_finder::output_minimum_energy(std::ostream& os) const 
     os << this->minimum_energy;
 }
 
-minimum_energy_finder::minimum_energy_finder() {}
+minimum_energy_finder::minimum_energy_finder(): minimum_energy(0) {}
 
 minimum_energy_finder::~minimum_energy_finder() {
     this->garage = std::map<double, std::list<item>> ();
