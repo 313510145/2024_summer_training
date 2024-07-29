@@ -1,8 +1,8 @@
-#include "min_energy_finder.h"
+#include "minimum_energy_finder.h"
 
 #include <algorithm>
 
-const void min_energy_finder::input_information(std::istream& is) {
+const void minimum_energy_finder::input_information(std::istream& is) {
     unsigned int num_item;
     item temp_item;
     std::list<item> temp_list;
@@ -18,22 +18,22 @@ const void min_energy_finder::input_information(std::istream& is) {
     temp_list = std::list<item> ();
 }
 
-const void min_energy_finder::calculate_min_energy() {
+const void minimum_energy_finder::calculate_minimum_energy() {
     unsigned int total_weight = 0;
     for (auto g: this->garage) {                                                // g: groups w/ same weight per time
         for (auto g_item: g.second) {                                           // g_item: items in each group, sequence is nothing
-            this->min_energy = this->min_energy + total_weight * g_item.time;
+            this->minimum_energy = this->minimum_energy + total_weight * g_item.time;
             total_weight = total_weight + g_item.weight;
         }
     }
 }
 
-const void min_energy_finder::output_min_energy(std::ostream& os) const {
-    os << this->min_energy;
+const void minimum_energy_finder::output_minimum_energy(std::ostream& os) const {
+    os << this->minimum_energy;
 }
 
-min_energy_finder::min_energy_finder() {}
+minimum_energy_finder::minimum_energy_finder() {}
 
-min_energy_finder::~min_energy_finder() {
+minimum_energy_finder::~minimum_energy_finder() {
     this->garage = std::map<double, std::list<item>> ();
 }
