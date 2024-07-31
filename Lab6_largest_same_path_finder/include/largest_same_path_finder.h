@@ -26,4 +26,4 @@ class largest_same_path_finder {
         unsigned int capital, resort;
 };
 
-#endif
+#endif  // LARGEST_SAME_PATH_FINDER_H

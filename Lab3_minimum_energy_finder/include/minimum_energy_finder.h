@@ -21,4 +21,4 @@ class minimum_energy_finder {
         unsigned int minimum_energy;
 };
 
-#endif
+#endif  // MINIMUM_ENERGY_FINDER_H

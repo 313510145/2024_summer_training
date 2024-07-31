@@ -27,4 +27,4 @@ class tour_guide {
         std::stack<step> tour_track;
 };
 
-#endif
+#endif  // TOUR_GUIDE_H

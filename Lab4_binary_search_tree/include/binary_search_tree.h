@@ -26,4 +26,4 @@ class binary_search_tree {
         const void delete_all_node(node* n);
 };
 
-#endif
+#endif  // BINARY_SEARCH_TREE_H

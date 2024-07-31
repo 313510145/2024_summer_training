@@ -24,4 +24,4 @@ class linked_list {
         const void delete_head_node();
 };
 
-#endif
+#endif  // LINKED_LIST_H

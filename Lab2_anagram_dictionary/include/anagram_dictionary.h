@@ -16,4 +16,4 @@ class anagram_dictionary {
         std::unordered_map<std::string, std::list<std::string>> group;
 };
 
-#endif
+#endif  // ANAGRAM_DICTIONARY_H
