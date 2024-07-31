@@ -1,7 +1,5 @@
 #include "minimum_energy_finder.h"
 
-#include <algorithm>
-
 const void minimum_energy_finder::input_information(std::istream& is) {
     unsigned int num_item;
     item temp_item;
