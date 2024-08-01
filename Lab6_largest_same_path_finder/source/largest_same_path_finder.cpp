@@ -110,7 +110,7 @@ const void largest_same_path_finder::bfs(const unsigned int& from) {
             }
         }
         this->vertex_to_resort[temp].color = 'b';               // black
-        q.pop();                                                // push and make it black
+        q.pop();                                                // pop and make it black
     }
 }
 
@@ -118,7 +118,7 @@ const void largest_same_path_finder::set_path() {
     unsigned int current_vertex_capital, current_vertex_resort;
     this->path_to_capital = std::list<unsigned int> ();                                             // clear path
     this->path_to_resort = std::list<unsigned int> ();
-    current_vertex_capital = this->capital;                                                         // backtrack
+    current_vertex_capital = this->capital;                                                         // for backtrack
     current_vertex_resort = this->resort;
     this->path_to_capital.push_front(current_vertex_capital);                                       // for while loop and UINT limit
     this->path_to_resort.push_front(current_vertex_resort);
