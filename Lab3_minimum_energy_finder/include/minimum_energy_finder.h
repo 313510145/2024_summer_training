@@ -11,13 +11,13 @@ struct item {
 
 class minimum_energy_finder {
     public:
-        const void input_information(std::istream& is);
-        const void calculate_minimum_energy();
+        const void input_information_and_calculate(std::istream& is);
         const void output_minimum_energy(std::ostream& os) const;
         minimum_energy_finder();
         ~minimum_energy_finder();
     private:
-        std::map<double, std::list<item>> garage;                   // auto-sort key
+        const void calculate_minimum_energy();
+        std::map<double, std::list<item>> garage;   // auto-sort key
         unsigned int minimum_energy;
 };
 

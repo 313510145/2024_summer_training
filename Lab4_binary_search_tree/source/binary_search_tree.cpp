@@ -40,47 +40,6 @@ const void binary_search_tree::input_operation_and_output_result(std::istream& i
     }
 }
 
-binary_search_tree::binary_search_tree(): root(nullptr) {}
-
-binary_search_tree::~binary_search_tree() {
-    delete_all_node(this->root);
-}
-
-const void binary_search_tree::insert_node(const int& value) {
-    node *n = new node, *temp;
-    n->data = value;
-    n->left = nullptr;
-    n->right = nullptr;
-    if (this->root == nullptr) {            // empty tree
-        this->root = n;
-        return;
-    }
-    temp = this->root;
-    while (true) {
-        if (value < temp->data) {           // smaller, go left
-            if (temp->left == nullptr) {
-                temp->left = n;
-                break;
-            }
-            else {
-                temp = temp->left;
-            }
-        }
-        else if (value > temp->data) {      // larger, go right
-            if (temp->right == nullptr) {
-                temp->right = n;
-                break;
-            }
-            else {
-                temp = temp->right;
-            }
-        }
-        else {                              // equal, no action
-            break;
-        }
-    }
-}
-
 const void binary_search_tree::search_value(std::ostream& os, const int& value) const {
     node* temp = this->root;
     os << "search " << value << ": ";
@@ -146,6 +105,47 @@ const void binary_search_tree::recursive_post_order(std::ostream& os, node* n) c
     recursive_post_order(os, n->left);
     recursive_post_order(os, n->right);
     os << n->data << " ";
+}
+
+binary_search_tree::binary_search_tree(): root(nullptr) {}
+
+binary_search_tree::~binary_search_tree() {
+    delete_all_node(this->root);
+}
+
+const void binary_search_tree::insert_node(const int& value) {
+    node *n = new node, *temp;
+    n->data = value;
+    n->left = nullptr;
+    n->right = nullptr;
+    if (this->root == nullptr) {            // empty tree
+        this->root = n;
+        return;
+    }
+    temp = this->root;
+    while (true) {
+        if (value < temp->data) {           // smaller, go left
+            if (temp->left == nullptr) {
+                temp->left = n;
+                break;
+            }
+            else {
+                temp = temp->left;
+            }
+        }
+        else if (value > temp->data) {      // larger, go right
+            if (temp->right == nullptr) {
+                temp->right = n;
+                break;
+            }
+            else {
+                temp = temp->right;
+            }
+        }
+        else {                              // equal, no action
+            break;
+        }
+    }
 }
 
 const void binary_search_tree::delete_all_node(node* n) {

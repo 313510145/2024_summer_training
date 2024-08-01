@@ -1,6 +1,6 @@
 #include "minimum_energy_finder.h"
 
-const void minimum_energy_finder::input_information(std::istream& is) {
+const void minimum_energy_finder::input_information_and_calculate(std::istream& is) {
     unsigned int num_item;
     item temp_item;
     std::list<item> temp_list;
@@ -14,20 +14,21 @@ const void minimum_energy_finder::input_information(std::istream& is) {
         this->garage[static_cast<double>(tl.weight) / tl.time].push_back(tl);   // sorted by weight / time
     }
     temp_list = std::list<item> ();
-}
-
-const void minimum_energy_finder::calculate_minimum_energy() {
-    unsigned int total_weight = 0;
-    for (auto g: this->garage) {                                                // g: groups w/ same weight per time
-        for (auto g_item: g.second) {                                           // g_item: items in each group, sequence is nothing
-            this->minimum_energy = this->minimum_energy + total_weight * g_item.time;
-            total_weight = total_weight + g_item.weight;
-        }
-    }
+    this->calculate_minimum_energy();
 }
 
 const void minimum_energy_finder::output_minimum_energy(std::ostream& os) const {
     os << this->minimum_energy;
+}
+
+const void minimum_energy_finder::calculate_minimum_energy() {
+    unsigned int total_weight = 0;
+    for (auto g: this->garage) {        // g: groups w/ same weight per time
+        for (auto g_item: g.second) {   // g_item: items in each group, sequence is nothing
+            this->minimum_energy = this->minimum_energy + total_weight * g_item.time;
+            total_weight = total_weight + g_item.weight;
+        }
+    }
 }
 
 minimum_energy_finder::minimum_energy_finder(): minimum_energy(0) {}

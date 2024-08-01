@@ -11,9 +11,8 @@ int main(int argc, char** argv) {
         std::cout << "Cannot open the input file!\n";
         exit(-1);
     }
-    mef->input_information(input_file);
+    mef->input_information_and_calculate(input_file);
     input_file.close();
-    mef->calculate_minimum_energy();
     output_file.open(argv[2]);
     if (!output_file) {
         std::cout << "Cannot open the output file!\n";

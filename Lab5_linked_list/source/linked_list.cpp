@@ -32,6 +32,15 @@ const void linked_list::input_operation_and_output_result(std::istream& is, std:
     }
 }
 
+const void linked_list::output_list(std::ostream& os) const {
+    node* temp = this->head;
+    while (temp != nullptr) {
+        os << temp->data << " ";
+        temp = temp->next;
+    }
+    os << std::endl;
+}
+
 linked_list::linked_list(): head(nullptr) {}
 
 linked_list::~linked_list() {
@@ -116,15 +125,6 @@ const void linked_list::remove_duplicate() {
         temp_node = temp_node->next;                            // go to next node
         delete_head_node();                                     // delete the head node
     }
-}
-
-const void linked_list::output_list(std::ostream& os) const {
-    node* temp = this->head;
-    while (temp != nullptr) {
-        os << temp->data << " ";
-        temp = temp->next;
-    }
-    os << std::endl;
 }
 
 const void linked_list::delete_head_node() {

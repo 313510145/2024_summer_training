@@ -11,6 +11,7 @@ struct node {
 class linked_list {
     public:
         const void input_operation_and_output_result(std::istream& is, std::ostream& os);
+        const void output_list(std::ostream& os) const;
         linked_list();
         ~linked_list();
     private:
@@ -20,7 +21,6 @@ class linked_list {
         const void delete_by_value(const int& value);
         const void reverse_list();
         const void remove_duplicate();
-        const void output_list(std::ostream& os) const;
         const void delete_head_node();
 };
 
