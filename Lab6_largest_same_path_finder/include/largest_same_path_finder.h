@@ -7,13 +7,14 @@
 
 struct vertex {
     char color;
-    unsigned int distance;
+    unsigned int parent, distance;  // parent: for backtracking path
 };
 
 class largest_same_path_finder {
     public:
         const void input_information_and_output_result(std::istream& is, std::ostream& os);
         const void output_adjacency_list(std::ostream& os) const;
+        const void output_vertex(std::ostream& os) const;
         const void output_path(std::ostream& os) const;
         largest_same_path_finder();
         ~largest_same_path_finder();
