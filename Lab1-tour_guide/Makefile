@@ -1,4 +1,4 @@
-.PHONY: all run check clean clear
+.PHONY: all run check generate clean clear
 
 CXX = g++
 CXX_FLAG = -Wall -std=c++11 -g -I ./include
@@ -8,6 +8,7 @@ SOURCE_DIRECTORY = source
 OBJECT_DIRECTORY = object
 TESTCASE_DIRECTORY = testcase
 OUTPUT_DIRECTORY = output
+GOLDEN_DIRECTORY = golden
 LOG_DIRECTORY = log
 SCRIPT_DIRECTORY = script
 
@@ -16,7 +17,7 @@ OBJECT = $(patsubst $(SOURCE_DIRECTORY)/%.cpp, $(OBJECT_DIRECTORY)/%.o, $(SOURCE
 TESTCASE = $(wildcard $(TESTCASE_DIRECTORY)/*)
 
 TARGET = Lab1
-VERIFIER = $(SCRIPT_DIRECTORY)/verifier
+GENERATOR = $(SCRIPT_DIRECTORY)/golden_generate
 
 all: $(TARGET)
 
@@ -25,6 +26,9 @@ $(OBJECT_DIRECTORY):
 
 $(OUTPUT_DIRECTORY):
 	mkdir $(OUTPUT_DIRECTORY)
+
+$(GOLDEN_DIRECTORY):
+	mkdir $(GOLDEN_DIRECTORY)
 
 $(LOG_DIRECTORY):
 	mkdir $(LOG_DIRECTORY)
@@ -42,15 +46,22 @@ run: $(TARGET) | $(OUTPUT_DIRECTORY)
 		./$(TARGET) "$$testcase" $(OUTPUT_DIRECTORY)/"$$testcase_base".out; \
 	done
 
-check: run | $(LOG_DIRECTORY)
+check: run generate | $(LOG_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		testcase_base=$$(basename "$$testcase"); \
 		testcase_base=$${testcase_base%.*}; \
-		./$(VERIFIER) "$$testcase" $(OUTPUT_DIRECTORY)/"$$testcase_base".out | tee $(LOG_DIRECTORY)/"$$testcase_base".log; \
+		diff $(OUTPUT_DIRECTORY)/"$$testcase_base".out $(GOLDEN_DIRECTORY)/"$$testcase_base".gold | tee $(LOG_DIRECTORY)/"$$testcase_base".log; \
+	done
+
+generate: | $(GOLDEN_DIRECTORY)
+	for testcase in $(TESTCASE); do \
+		testcase_base=$$(basename "$$testcase"); \
+		testcase_base=$${testcase_base%.*}; \
+		./$(GENERATOR) "$$testcase" $(GOLDEN_DIRECTORY)/"$$testcase_base".gold; \
 	done
 
 clear:
-	rm -rf $(TARGET) $(OBJECT_DIRECTORY) $(OUTPUT_DIRECTORY) $(LOG_DIRECTORY)
+	rm -rf $(TARGET) $(OBJECT_DIRECTORY) $(OUTPUT_DIRECTORY) $(GOLDEN_DIRECTORY) $(LOG_DIRECTORY)
 
 clean:
 	rm -rf $(TARGET) $(OBJECT_DIRECTORY)
