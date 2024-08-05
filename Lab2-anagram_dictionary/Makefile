@@ -1,9 +1,8 @@
 .PHONY: all run check clean clear
 
 CXX = g++
-CXX_FLAG = -Wall -std=c++11 -g -I ./include
+CXX_FLAG = -Wall -std=c++11 -g -I ./header
 
-INCLUDE_DIRECTORY = include
 SOURCE_DIRECTORY = source
 OBJECT_DIRECTORY = object
 TESTCASE_DIRECTORY = testcase
