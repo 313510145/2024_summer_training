@@ -1,6 +1,5 @@
 #include "rob_master.h"
 
-#include <iomanip>
 #include <stack>
 
 const void rob_master::input_information(std::istream& is) {
@@ -32,8 +31,8 @@ const void rob_master::input_information(std::istream& is) {
 
 const void rob_master::output_community(std::ostream& os) const {
     for (auto c: this->community) {
-        os << "money: " << std::setw(3) << c.money
-           << ", maximum amount: " << std::setw(3) << c.maximum_amount
+        os << "money: " << c.money
+           << ", maximum amount: " << c.maximum_amount
            << ", previous house: " << c.previous_house
            << std::endl;
     }
