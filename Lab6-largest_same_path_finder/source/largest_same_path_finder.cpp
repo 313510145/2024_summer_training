@@ -78,6 +78,7 @@ const void largest_same_path_finder::bfs(const unsigned int& from) {
         this->vertex_to_capital[al.first] = initial_vertex;
         this->vertex_to_resort[al.first] = initial_vertex;
     }
+    // to capital
     this->vertex_to_capital[from].color = 'g';                  // gray
     this->vertex_to_capital[from].distance = 0;                 // distance from start point
     std::queue<unsigned int> q;
@@ -96,6 +97,7 @@ const void largest_same_path_finder::bfs(const unsigned int& from) {
         this->vertex_to_capital[temp].color = 'b';              // black
         q.pop();                                                // pop and make it black
     }
+    // to resort
     this->vertex_to_resort[from].color = 'g';                   // gray
     this->vertex_to_resort[from].distance = 0;
     q.push(from);                                               // push and make it gray
@@ -115,19 +117,19 @@ const void largest_same_path_finder::bfs(const unsigned int& from) {
 }
 
 const void largest_same_path_finder::set_path() {
-    unsigned int current_vertex_capital, current_vertex_resort;
-    this->path_to_capital = std::list<unsigned int> ();                                             // clear path
-    this->path_to_resort = std::list<unsigned int> ();
-    current_vertex_capital = this->capital;                                                         // for backtrack
-    current_vertex_resort = this->resort;
-    this->path_to_capital.push_front(current_vertex_capital);                                       // for while loop and UINT limit
-    this->path_to_resort.push_front(current_vertex_resort);
-    while (this->vertex_to_capital[current_vertex_capital].distance > 0) {
-        this->path_to_capital.push_front(this->vertex_to_capital[current_vertex_capital].parent);   // push its parent to front
-        current_vertex_capital = this->vertex_to_capital[current_vertex_capital].parent;            // update current vertex
+    unsigned int current_vertex;
+    this->path_to_capital = std::list<unsigned int> ();                                     // clear path
+    current_vertex = this->capital;                                                         // for backtrack
+    this->path_to_capital.push_front(current_vertex);                                       // for while loop and UINT limit
+    while (this->vertex_to_capital[current_vertex].distance > 0) {
+        this->path_to_capital.push_front(this->vertex_to_capital[current_vertex].parent);   // push its parent to front
+        current_vertex = this->vertex_to_capital[current_vertex].parent;                    // update current vertex
     }
-    while (this->vertex_to_resort[current_vertex_resort].distance > 0) {
-        this->path_to_resort.push_front(this->vertex_to_resort[current_vertex_resort].parent);      // push its parent to front
-        current_vertex_resort = this->vertex_to_resort[current_vertex_resort].parent;               // update current vertex
+    this->path_to_resort = std::list<unsigned int> ();
+    current_vertex= this->resort;
+    this->path_to_resort.push_front(current_vertex);
+    while (this->vertex_to_resort[current_vertex].distance > 0) {
+        this->path_to_resort.push_front(this->vertex_to_resort[current_vertex].parent);     // push its parent to front
+        current_vertex = this->vertex_to_resort[current_vertex].parent;                     // update current vertex
     }
 }
