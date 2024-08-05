@@ -2,10 +2,10 @@
 
 const void minimum_energy_finder::input_information_and_calculate(std::istream& is) {
     unsigned int num_item;
-    item temp_item;
     std::list<item> temp_list;
     is >> num_item;
     for (unsigned int i = 0; i < num_item; i = i + 1) {
+        item temp_item;
         is >> temp_item.weight;
         temp_list.push_back(temp_item);
     }

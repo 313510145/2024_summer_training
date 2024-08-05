@@ -3,9 +3,9 @@
 #include <algorithm>
 
 const void anagram_dictionary::input_string_and_group(std::istream& is) {
-    std::string current_line, sorted_temp;
+    std::string current_line;
     while (getline(is, current_line, ',')) {
-        std::string temp;
+        std::string temp, sorted_temp;
         for (char c: current_line) {                    // parser
             if (c == '\"' || c == '[' || c == ']') {
                 continue;
