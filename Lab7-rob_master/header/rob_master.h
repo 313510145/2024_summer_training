@@ -6,14 +6,13 @@
 
 struct house {
     unsigned int money;
-    unsigned int maximum_amount, previous_house;
+    unsigned int maximum_amount;
 };
 
 class rob_master {
     public:
         const void input_information(std::istream& is);
         const void output_community(std::ostream& os) const;
-        const void output_path(std::ostream& os) const;
         const void output_maximum_amount(std::ostream& os) const;
         rob_master();
         ~rob_master();
