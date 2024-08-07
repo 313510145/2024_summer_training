@@ -11,7 +11,7 @@ struct house {
 
 class rob_master {
     public:
-        const void input_information(std::istream& is);
+        const void input_information_and_calculate(std::istream& is);
         const void output_community(std::ostream& os) const;
         const void output_maximum_amount(std::ostream& os) const;
         rob_master();

@@ -1,6 +1,6 @@
 #include "rob_master.h"
 
-const void rob_master::input_information(std::istream& is) {
+const void rob_master::input_information_and_calculate(std::istream& is) {
     house temp_house;
     while (is >> temp_house.money) {
         switch (this->community.size()) {

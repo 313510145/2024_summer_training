@@ -9,7 +9,7 @@ int main(int argc, char** argv) {
         std::cout << "Cannot open the input file!\n";
         exit(-1);
     }
-    rm->input_information(input_file);
+    rm->input_information_and_calculate(input_file);
     input_file.close();
     std::ofstream output_file(argv[2]);
     if (!output_file) {
