@@ -1,17 +1,5 @@
 #include "tour_guide.h"
 
-const int tour_guide::TOUR_MAP_SIZE = 5, tour_guide::NUM_DIRECTION = 8;
-const coordinate* tour_guide::DIRECTION = new coordinate[tour_guide::NUM_DIRECTION] {
-    {.x = -1, .y =  2},
-    {.x =  1, .y =  2},
-    {.x =  2, .y =  1},
-    {.x =  2, .y = -1},
-    {.x =  1, .y = -2},
-    {.x = -1, .y = -2},
-    {.x = -2, .y = -1},
-    {.x = -2, .y =  1}
-};
-
 const void tour_guide::input_toured_track_and_tour(std::istream& is) {
     unsigned int num_step, i;
     int j;
@@ -71,8 +59,8 @@ const void tour_guide::input_toured_track_and_tour(std::istream& is) {
 }
 
 const void tour_guide::output_tour_map(std::ostream& os) const {
-    for (unsigned int i = 0; i < this->TOUR_MAP_SIZE; i = i + 1) {
-        for (unsigned int j = 0; j < this->TOUR_MAP_SIZE; j = j + 1) {
+    for (int i = 0; i < this->TOUR_MAP_SIZE; i = i + 1) {
+        for (int j = 0; j < this->TOUR_MAP_SIZE; j = j + 1) {
             if (this->tour_map[i][j] == 0) {
                 os << " ";
             }
@@ -96,16 +84,27 @@ const void tour_guide::output_tour_track(std::ostream& os) const {
     }
 }
 
-tour_guide::tour_guide() {
+tour_guide::tour_guide(): TOUR_MAP_SIZE(5), NUM_DIRECTION(8) {
+    this->DIRECTION = new coordinate[this->NUM_DIRECTION] {
+        {.x = -1, .y =  2},
+        {.x =  1, .y =  2},
+        {.x =  2, .y =  1},
+        {.x =  2, .y = -1},
+        {.x =  1, .y = -2},
+        {.x = -1, .y = -2},
+        {.x = -2, .y = -1},
+        {.x = -2, .y =  1}
+    };
     this->tour_map = new bool*[this->TOUR_MAP_SIZE];
-    for (unsigned int i = 0; i < this->TOUR_MAP_SIZE; i = i + 1) {
+    for (int i = 0; i < this->TOUR_MAP_SIZE; i = i + 1) {
         // this->tour_map[i] = new bool[this->TOUR_MAP_SIZE] ();
         this->tour_map[i] = new bool[this->TOUR_MAP_SIZE] {0};      // or above
     }
 }
 
 tour_guide::~tour_guide() {
-    for (unsigned int i = 0; i < this->TOUR_MAP_SIZE; i = i + 1) {
+    delete [] this->DIRECTION;
+    for (int i = 0; i < this->TOUR_MAP_SIZE; i = i + 1) {
         delete [] this->tour_map[i];
     }
     delete [] this->tour_map;

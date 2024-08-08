@@ -1,15 +1,19 @@
-.PHONY: all run check generate clean clear
+.PHONY: all run check generate clean
 
 CXX = g++
 CXX_FLAG = -Wall -std=c++11 -g -I ./header
 
-SOURCE_DIRECTORY = source
-OBJECT_DIRECTORY = object
-TESTCASE_DIRECTORY = testcase
-OUTPUT_DIRECTORY = output
+CHECKCC = valgrind
+CHECKCC_FLAG = --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose
+
 GOLDEN_DIRECTORY = golden
-LOG_DIRECTORY = log
+MEMORY_DIRECTORY = memory
+OBJECT_DIRECTORY = object
+OUTPUT_DIRECTORY = output
 SCRIPT_DIRECTORY = script
+SOURCE_DIRECTORY = source
+TEST_DIRECTORY = test
+TESTCASE_DIRECTORY = testcase
 
 SOURCE = $(wildcard $(SOURCE_DIRECTORY)/*.cpp)
 OBJECT = $(patsubst $(SOURCE_DIRECTORY)/%.cpp, $(OBJECT_DIRECTORY)/%.o, $(SOURCE))
@@ -20,17 +24,20 @@ GENERATOR = $(SCRIPT_DIRECTORY)/golden_generate
 
 all: $(TARGET)
 
+$(GOLDEN_DIRECTORY):
+	mkdir $(GOLDEN_DIRECTORY)
+
+$(MEMORY_DIRECTORY):
+	mkdir $(MEMORY_DIRECTORY)
+
 $(OBJECT_DIRECTORY):
 	mkdir $(OBJECT_DIRECTORY)
 
 $(OUTPUT_DIRECTORY):
 	mkdir $(OUTPUT_DIRECTORY)
 
-$(GOLDEN_DIRECTORY):
-	mkdir $(GOLDEN_DIRECTORY)
-
-$(LOG_DIRECTORY):
-	mkdir $(LOG_DIRECTORY)
+$(TEST_DIRECTORY):
+	mkdir $(TEST_DIRECTORY)
 
 $(TARGET): main.cpp $(OBJECT)
 	$(CXX) $(CXX_FLAG) $^ -o $@
@@ -38,18 +45,18 @@ $(TARGET): main.cpp $(OBJECT)
 $(OBJECT_DIRECTORY)/%.o: $(SOURCE_DIRECTORY)/%.cpp | $(OBJECT_DIRECTORY)
 	$(CXX) $(CXX_FLAG) -c $< -o $@
 
-run: $(TARGET) | $(OUTPUT_DIRECTORY)
+run: $(TARGET) | $(OUTPUT_DIRECTORY) $(MEMORY_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		testcase_base=$$(basename "$$testcase"); \
 		testcase_base=$${testcase_base%.*}; \
-		./$(TARGET) "$$testcase" $(OUTPUT_DIRECTORY)/"$$testcase_base".out; \
+		$(CHECKCC) $(CHECKCC_FLAG) --log-file=$(MEMORY_DIRECTORY)/"$$testcase_base.log" ./$(TARGET) "$$testcase" $(OUTPUT_DIRECTORY)/"$$testcase_base".out; \
 	done
 
-check: run generate | $(LOG_DIRECTORY)
+check: run generate | $(TEST_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		testcase_base=$$(basename "$$testcase"); \
 		testcase_base=$${testcase_base%.*}; \
-		diff $(OUTPUT_DIRECTORY)/"$$testcase_base".out $(GOLDEN_DIRECTORY)/"$$testcase_base".gold | tee $(LOG_DIRECTORY)/"$$testcase_base".log; \
+		diff $(OUTPUT_DIRECTORY)/"$$testcase_base".out $(GOLDEN_DIRECTORY)/"$$testcase_base".gold | tee $(TEST_DIRECTORY)/"$$testcase_base".log; \
 	done
 
 generate: | $(GOLDEN_DIRECTORY)
@@ -59,8 +66,5 @@ generate: | $(GOLDEN_DIRECTORY)
 		./$(GENERATOR) "$$testcase" $(GOLDEN_DIRECTORY)/"$$testcase_base".gold; \
 	done
 
-clear:
-	rm -rf $(TARGET) $(OBJECT_DIRECTORY) $(OUTPUT_DIRECTORY) $(GOLDEN_DIRECTORY) $(LOG_DIRECTORY)
-
 clean:
-	rm -rf $(TARGET) $(OBJECT_DIRECTORY)
+	rm -rf $(TARGET) $(GOLDEN_DIRECTORY) $(MEMORY_DIRECTORY) $(OBJECT_DIRECTORY) $(OUTPUT_DIRECTORY) $(TEST_DIRECTORY)

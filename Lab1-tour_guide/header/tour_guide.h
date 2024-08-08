@@ -21,8 +21,8 @@ class tour_guide {
         tour_guide();
         ~tour_guide();
     private:
-        static const int TOUR_MAP_SIZE, NUM_DIRECTION;
-        static const coordinate* DIRECTION;
+        int TOUR_MAP_SIZE, NUM_DIRECTION;
+        coordinate* DIRECTION;
         bool** tour_map;
         std::stack<step> tour_track;
 };
