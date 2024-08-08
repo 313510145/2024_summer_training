@@ -10,7 +10,7 @@ GOLDEN_DIRECTORY = golden
 MEMORY_DIRECTORY = memory
 OBJECT_DIRECTORY = object
 OUTPUT_DIRECTORY = output
-TEST_DIRECTORY = test
+VERIFICATION_DIRECTORY = verification
 
 SCRIPT_DIRECTORY = script
 SOURCE_DIRECTORY = source
@@ -37,8 +37,8 @@ $(OBJECT_DIRECTORY):
 $(OUTPUT_DIRECTORY):
 	mkdir $(OUTPUT_DIRECTORY)
 
-$(TEST_DIRECTORY):
-	mkdir $(TEST_DIRECTORY)
+$(VERIFICATION_DIRECTORY):
+	mkdir $(VERIFICATION_DIRECTORY)
 
 $(TARGET): main.cpp $(OBJECT)
 	$(CXX) $(CXX_FLAG) $^ -o $@
@@ -46,11 +46,11 @@ $(TARGET): main.cpp $(OBJECT)
 $(OBJECT_DIRECTORY)/%.o: $(SOURCE_DIRECTORY)/%.cpp | $(OBJECT_DIRECTORY)
 	$(CXX) $(CXX_FLAG) -c $< -o $@
 
-check: run generate | $(TEST_DIRECTORY)
+check: run generate | $(VERIFICATION_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		testcase_base=$$(basename "$$testcase"); \
 		testcase_base=$${testcase_base%.*}; \
-		diff $(OUTPUT_DIRECTORY)/"$$testcase_base".out $(GOLDEN_DIRECTORY)/"$$testcase_base".gold | tee $(TEST_DIRECTORY)/"$$testcase_base".log; \
+		diff $(OUTPUT_DIRECTORY)/"$$testcase_base".out $(GOLDEN_DIRECTORY)/"$$testcase_base".gold | tee $(VERIFICATION_DIRECTORY)/"$$testcase_base".log; \
 	done
 
 run: $(TARGET) | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
@@ -68,4 +68,4 @@ generate: | $(GOLDEN_DIRECTORY)
 	done
 
 clean:
-	rm -rf $(TARGET) $(GOLDEN_DIRECTORY) $(MEMORY_DIRECTORY) $(OBJECT_DIRECTORY) $(OUTPUT_DIRECTORY) $(TEST_DIRECTORY)
+	rm -rf $(TARGET) $(GOLDEN_DIRECTORY) $(MEMORY_DIRECTORY) $(OBJECT_DIRECTORY) $(OUTPUT_DIRECTORY) $(VERIFICATION_DIRECTORY)

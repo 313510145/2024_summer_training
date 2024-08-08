@@ -9,7 +9,7 @@ CHECKCC_FLAG = --leak-check=full --show-leak-kinds=all --track-origins=yes --ver
 MEMORY_DIRECTORY = memory
 OBJECT_DIRECTORY = object
 OUTPUT_DIRECTORY = output
-TEST_DIRECTORY = test
+VERIFICATION_DIRECTORY = verification
 
 SCRIPT_DIRECTORY = script
 SOURCE_DIRECTORY = source
@@ -35,8 +35,8 @@ $(OBJECT_DIRECTORY):
 $(OUTPUT_DIRECTORY):
 	mkdir $(OUTPUT_DIRECTORY)
 
-$(TEST_DIRECTORY):
-	mkdir $(TEST_DIRECTORY)
+$(VERIFICATION_DIRECTORY):
+	mkdir $(VERIFICATION_DIRECTORY)
 
 $(TARGET): main.cpp $(OBJECT)
 	$(CXX) $(CXX_FLAG) $^ -o $@
@@ -44,11 +44,11 @@ $(TARGET): main.cpp $(OBJECT)
 $(OBJECT_DIRECTORY)/%.o: $(SOURCE_DIRECTORY)/%.cpp | $(OBJECT_DIRECTORY)
 	$(CXX) $(CXX_FLAG) -c $< -o $@
 
-check: run | $(TEST_DIRECTORY)
+check: run | $(VERIFICATION_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		testcase_base=$$(basename "$$testcase"); \
 		testcase_base=$${testcase_base%.*}; \
-		./$(VERIFIER) "$$testcase" $(OUTPUT_DIRECTORY)/"$$testcase_base".out | tee $(TEST_DIRECTORY)/"$$testcase_base".log; \
+		./$(VERIFIER) "$$testcase" $(OUTPUT_DIRECTORY)/"$$testcase_base".out | tee $(VERIFICATION_DIRECTORY)/"$$testcase_base".log; \
 	done
 
 run: $(TARGET) generate | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
@@ -65,7 +65,7 @@ generate:
 	done
 
 clean:
-	rm -rf $(TARGET) $(MEMORY_DIRECTORY) $(OBJECT_DIRECTORY) $(OUTPUT_DIRECTORY) $(TEST_DIRECTORY)
+	rm -rf $(TARGET) $(MEMORY_DIRECTORY) $(OBJECT_DIRECTORY) $(OUTPUT_DIRECTORY) $(VERIFICATION_DIRECTORY)
 	((i = 3)); while [ $$i -le $(NUM_CASE) ]; do \
 		rm -rf $(TESTCASE_DIRECTORY)/"$$i".in; \
 		((i = i + 1)); \
