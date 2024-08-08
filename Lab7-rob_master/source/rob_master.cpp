@@ -38,5 +38,5 @@ const void rob_master::output_maximum_amount(std::ostream& os) const {
 rob_master::rob_master() {}
 
 rob_master::~rob_master() {
-    community = std::vector<house> ();
+    this->community.clear();
 }

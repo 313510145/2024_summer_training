@@ -17,7 +17,7 @@ class minimum_energy_finder {
         ~minimum_energy_finder();
     private:
         const void calculate_minimum_energy();
-        std::map<double, std::list<item>> garage;   // auto-sort key
+        std::map<double, std::list<item>> garage;   // auto-sorted key
         unsigned int minimum_energy;
 };
 

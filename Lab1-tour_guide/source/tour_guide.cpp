@@ -108,5 +108,7 @@ tour_guide::~tour_guide() {
         delete [] this->tour_map[i];
     }
     delete [] this->tour_map;
-    this->tour_track = std::stack<step> ();
+    while (!this->tour_track.empty()) {
+        this->tour_track.pop();
+    }
 }

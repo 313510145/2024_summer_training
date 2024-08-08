@@ -33,5 +33,5 @@ const void anagram_dictionary::output_group(std::ostream& os) const {
 anagram_dictionary::anagram_dictionary() {}
 
 anagram_dictionary::~anagram_dictionary() {
-    this->group = std::unordered_map<std::string, std::list<std::string>> ();
+    this->group.clear();
 }

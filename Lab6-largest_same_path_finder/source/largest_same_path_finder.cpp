@@ -62,11 +62,11 @@ const void largest_same_path_finder::output_path(std::ostream& os) const {
 largest_same_path_finder::largest_same_path_finder(): capital(0), resort(0) {}
 
 largest_same_path_finder::~largest_same_path_finder() {
-    this->adjacency_list = std::unordered_map<unsigned int, std::list<unsigned int>> ();
-    this->vertex_to_capital = std::unordered_map<unsigned int, vertex> ();
-    this->vertex_to_resort = std::unordered_map<unsigned int, vertex> ();
-    this->path_to_capital = std::list<unsigned int> ();
-    this->path_to_resort = std::list<unsigned int> ();
+    this->adjacency_list.clear();
+    this->vertex_to_capital.clear();
+    this->vertex_to_resort.clear();
+    this->path_to_capital.clear();
+    this->path_to_resort.clear();
 }
 
 const void largest_same_path_finder::bfs(const unsigned int& from) {

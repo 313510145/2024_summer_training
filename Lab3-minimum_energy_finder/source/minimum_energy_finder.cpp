@@ -34,5 +34,5 @@ const void minimum_energy_finder::calculate_minimum_energy() {
 minimum_energy_finder::minimum_energy_finder(): minimum_energy(0) {}
 
 minimum_energy_finder::~minimum_energy_finder() {
-    this->garage = std::map<double, std::list<item>> ();
+    this->garage.clear();
 }
