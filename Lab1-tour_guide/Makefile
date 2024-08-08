@@ -1,4 +1,4 @@
-.PHONY: all run check generate clean
+.PHONY: all check run generate clean
 
 CXX = g++
 CXX_FLAG = -Wall -std=c++11 -g -I ./header
@@ -10,9 +10,10 @@ GOLDEN_DIRECTORY = golden
 MEMORY_DIRECTORY = memory
 OBJECT_DIRECTORY = object
 OUTPUT_DIRECTORY = output
+TEST_DIRECTORY = test
+
 SCRIPT_DIRECTORY = script
 SOURCE_DIRECTORY = source
-TEST_DIRECTORY = test
 TESTCASE_DIRECTORY = testcase
 
 SOURCE = $(wildcard $(SOURCE_DIRECTORY)/*.cpp)
@@ -45,18 +46,18 @@ $(TARGET): main.cpp $(OBJECT)
 $(OBJECT_DIRECTORY)/%.o: $(SOURCE_DIRECTORY)/%.cpp | $(OBJECT_DIRECTORY)
 	$(CXX) $(CXX_FLAG) -c $< -o $@
 
-run: $(TARGET) | $(OUTPUT_DIRECTORY) $(MEMORY_DIRECTORY)
-	for testcase in $(TESTCASE); do \
-		testcase_base=$$(basename "$$testcase"); \
-		testcase_base=$${testcase_base%.*}; \
-		$(CHECKCC) $(CHECKCC_FLAG) --log-file=$(MEMORY_DIRECTORY)/"$$testcase_base.log" ./$(TARGET) "$$testcase" $(OUTPUT_DIRECTORY)/"$$testcase_base".out; \
-	done
-
 check: run generate | $(TEST_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		testcase_base=$$(basename "$$testcase"); \
 		testcase_base=$${testcase_base%.*}; \
 		diff $(OUTPUT_DIRECTORY)/"$$testcase_base".out $(GOLDEN_DIRECTORY)/"$$testcase_base".gold | tee $(TEST_DIRECTORY)/"$$testcase_base".log; \
+	done
+
+run: $(TARGET) | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
+	for testcase in $(TESTCASE); do \
+		testcase_base=$$(basename "$$testcase"); \
+		testcase_base=$${testcase_base%.*}; \
+		$(CHECKCC) $(CHECKCC_FLAG) --log-file=$(MEMORY_DIRECTORY)/"$$testcase_base.log" ./$(TARGET) "$$testcase" $(OUTPUT_DIRECTORY)/"$$testcase_base".out; \
 	done
 
 generate: | $(GOLDEN_DIRECTORY)

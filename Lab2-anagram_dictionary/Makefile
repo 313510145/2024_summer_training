@@ -1,14 +1,19 @@
-.PHONY: all run check clean clear
+.PHONY: all check run clean
 
 CXX = g++
 CXX_FLAG = -Wall -std=c++11 -g -I ./header
 
-SOURCE_DIRECTORY = source
+CHECKCC = valgrind
+CHECKCC_FLAG = --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose
+
+MEMORY_DIRECTORY = memory
 OBJECT_DIRECTORY = object
-TESTCASE_DIRECTORY = testcase
 OUTPUT_DIRECTORY = output
-LOG_DIRECTORY = log
+TEST_DIRECTORY = test
+
 SCRIPT_DIRECTORY = script
+SOURCE_DIRECTORY = source
+TESTCASE_DIRECTORY = testcase
 
 SOURCE = $(wildcard $(SOURCE_DIRECTORY)/*.cpp)
 OBJECT = $(patsubst $(SOURCE_DIRECTORY)/%.cpp, $(OBJECT_DIRECTORY)/%.o, $(SOURCE))
@@ -19,14 +24,17 @@ VERIFIER = $(SCRIPT_DIRECTORY)/verifier
 
 all: $(TARGET)
 
+$(MEMORY_DIRECTORY):
+	mkdir $(MEMORY_DIRECTORY)
+
 $(OBJECT_DIRECTORY):
 	mkdir $(OBJECT_DIRECTORY)
 
 $(OUTPUT_DIRECTORY):
 	mkdir $(OUTPUT_DIRECTORY)
 
-$(LOG_DIRECTORY):
-	mkdir $(LOG_DIRECTORY)
+$(TEST_DIRECTORY):
+	mkdir $(TEST_DIRECTORY)
 
 $(TARGET): main.cpp $(OBJECT)
 	$(CXX) $(CXX_FLAG) $^ -o $@
@@ -34,22 +42,19 @@ $(TARGET): main.cpp $(OBJECT)
 $(OBJECT_DIRECTORY)/%.o: $(SOURCE_DIRECTORY)/%.cpp | $(OBJECT_DIRECTORY)
 	$(CXX) $(CXX_FLAG) -c $< -o $@
 
-run: $(TARGET) | $(OUTPUT_DIRECTORY)
+check: run | $(TEST_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		testcase_base=$$(basename "$$testcase"); \
 		testcase_base=$${testcase_base%.*}; \
-		./$(TARGET) "$$testcase" $(OUTPUT_DIRECTORY)/"$$testcase_base".out; \
+		./$(VERIFIER) "$$testcase" $(OUTPUT_DIRECTORY)/"$$testcase_base".out | tee $(TEST_DIRECTORY)/"$$testcase_base".log; \
 	done
 
-check: run | $(LOG_DIRECTORY)
+run: $(TARGET) | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		testcase_base=$$(basename "$$testcase"); \
 		testcase_base=$${testcase_base%.*}; \
-		./$(VERIFIER) "$$testcase" $(OUTPUT_DIRECTORY)/"$$testcase_base".out | tee $(LOG_DIRECTORY)/"$$testcase_base".log; \
+		$(CHECKCC) $(CHECKCC_FLAG) --log-file=$(MEMORY_DIRECTORY)/"$$testcase_base.log" ./$(TARGET) "$$testcase" $(OUTPUT_DIRECTORY)/"$$testcase_base".out; \
 	done
-
-clear:
-	rm -rf $(TARGET) $(OBJECT_DIRECTORY) $(OUTPUT_DIRECTORY) $(LOG_DIRECTORY)
 
 clean:
-	rm -rf $(TARGET) $(OBJECT_DIRECTORY)
+	rm -rf $(TARGET) $(MEMORY_DIRECTORY) $(OBJECT_DIRECTORY) $(OUTPUT_DIRECTORY) $(TEST_DIRECTORY)
