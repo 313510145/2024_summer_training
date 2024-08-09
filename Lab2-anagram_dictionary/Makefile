@@ -2,6 +2,7 @@
 
 CXX = g++
 CXX_FLAG = -Wall -std=c++11 -g -I ./header
+# OPTIMIZATION_FLAG = -march=native -flto -funroll-loops -finline-functions -ffast-math -O3
 
 CHECKCC = valgrind
 CHECKCC_FLAG = --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose
